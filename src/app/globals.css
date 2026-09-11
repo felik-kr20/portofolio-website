@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Background layers — lighter navy/slate palette */
+  --color-bg-primary:    #0f1117;
+  --color-bg-secondary:  #161b27;
+  --color-bg-card:       #1e2535;
+  --color-bg-elevated:   #252d40;
+
+  /* Accent — brighter violet-blue */
+  --color-accent:        #818cf8;
+  --color-accent-light:  #a5b4fc;
+  --color-accent-glow:   rgba(129, 140, 248, 0.20);
+
+  /* Text — brighter */
+  --color-text-primary:  #f8fafc;
+  --color-text-secondary:#cbd5e1;
+  --color-text-muted:    #64748b;
+
+  /* Border */
+  --color-border:        #2a3347;
+  --color-border-accent: rgba(129, 140, 248, 0.35);
+
+  /* Status */
+  --color-success:       #34d399;
+  --color-error:         #f87171;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+@media print {
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
