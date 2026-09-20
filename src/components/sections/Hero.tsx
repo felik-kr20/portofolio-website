@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from 'framer-motion';
-import { Linkedin, Github, Mail, ArrowRight } from 'lucide-react';
+import { Linkedin, Instagram, Mail, ArrowRight } from 'lucide-react';
 import { PersonalInfo } from '@/data/portfolio';
 import { fadeInUp, staggerContainer } from '@/lib/animations';
 
@@ -11,7 +11,7 @@ interface HeroProps {
 
 const socialIcons: Record<string, React.ElementType> = {
   linkedin: Linkedin,
-  github: Github,
+  instagram: Instagram,
   email: Mail,
 };
 

@@ -1,7 +1,7 @@
-// ─── Personal Info ────────────────────────────────────────────────────────────
+﻿// â”€â”€â”€ Personal Info â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export interface SocialLink {
-  platform: 'linkedin' | 'github' | 'email';
+  platform: 'linkedin' | 'instagram' | 'email';
   url: string;
   label: string;
 }
@@ -30,7 +30,7 @@ export interface PersonalInfo {
   contact: ContactInfo;
 }
 
-// ─── Responsibilities (What I Do) ─────────────────────────────────────────────
+// â”€â”€â”€ Responsibilities (What I Do) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export interface Responsibility {
   id: string;
@@ -39,7 +39,7 @@ export interface Responsibility {
   icon: string;
 }
 
-// ─── Technical Skills ─────────────────────────────────────────────────────────
+// â”€â”€â”€ Technical Skills â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export interface Skill {
   name: string;
@@ -52,7 +52,7 @@ export interface SkillCategory {
   skills: Skill[];
 }
 
-// ─── Work Experience ──────────────────────────────────────────────────────────
+// â”€â”€â”€ Work Experience â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export interface WorkExperience {
   id: string;
@@ -67,7 +67,7 @@ export interface WorkExperience {
   technologies?: string[];
 }
 
-// ─── Projects ─────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Projects â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export interface Project {
   id: string;
@@ -81,7 +81,7 @@ export interface Project {
   imageAlt: string;
 }
 
-// ─── Tools & Technologies ─────────────────────────────────────────────────────
+// â”€â”€â”€ Tools & Technologies â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export interface Tool {
   id: string;
@@ -90,7 +90,7 @@ export interface Tool {
   category: string;
 }
 
-// ─── Root Data Export ─────────────────────────────────────────────────────────
+// â”€â”€â”€ Root Data Export â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export interface PortfolioData {
   personal: PersonalInfo;
@@ -101,17 +101,17 @@ export interface PortfolioData {
   tools: Tool[];
 }
 
-// ─── Portfolio Data ────────────────────────────────────────────────────────────
+// â”€â”€â”€ Portfolio Data â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const portfolioData: PortfolioData = {
-  // ── Personal Info ────────────────────────────────────────────────────────
+  // â”€â”€ Personal Info â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   personal: {
     name: 'Felik Kriswanto',
     title: 'IT Support & Technical Support Specialist',
     tagline: 'Turning complex tech problems into seamless solutions.',
     bio: 'Profesional IT Support dengan pengalaman lebih dari 4 tahun dalam technical support, implementasi sistem, testing aplikasi, dan project handling. Terbiasa menjadi PIC project dan berkolaborasi lintas tim untuk memastikan sistem berjalan optimal.',
     aboutBio:
-      'Saya Felik Kriswanto, lulusan S1 Teknik Informatika konsentrasi Networking dari STMIK Nusa Mandiri Jakarta dengan IPK 3,61. Saya memiliki rekam jejak yang solid dalam IT Service, mulai dari dukungan teknis end-user, implementasi dan testing aplikasi bisnis (HRMS, POS/Kasir, TMS, Website System), hingga menjadi PIC project di lingkungan enterprise. Saya dikenal sebagai pribadi yang teliti, komunikatif, dan adaptif—selalu siap menghadapi tantangan teknologi baru dengan pendekatan yang terstruktur dan berorientasi pada solusi.',
+      'Saya Felik Kriswanto, lulusan S1 Teknik Informatika konsentrasi Networking dari STMIK Nusa Mandiri Jakarta dengan IPK 3,61. Saya memiliki rekam jejak yang solid dalam IT Service, mulai dari dukungan teknis end-user, implementasi dan testing aplikasi bisnis (HRMS, POS/Kasir, TMS, Website System), hingga menjadi PIC project di lingkungan enterprise. Saya dikenal sebagai pribadi yang teliti, komunikatif, dan adaptifâ€”selalu siap menghadapi tantangan teknologi baru dengan pendekatan yang terstruktur dan berorientasi pada solusi.',
     highlights: [
       { label: 'Tahun Pengalaman', value: '4+', icon: 'Briefcase' },
       { label: 'Project Ditangani', value: '5+', icon: 'CheckCircle' },
@@ -121,13 +121,13 @@ export const portfolioData: PortfolioData = {
     social: [
       {
         platform: 'linkedin',
-        url: 'https://linkedin.com/in/felikriswanto',
+        url: 'https://www.linkedin.com/in/felik-kriswanto-2139561b6',
         label: 'LinkedIn',
       },
       {
-        platform: 'github',
-        url: 'https://github.com/felikriswanto',
-        label: 'GitHub',
+        platform: 'instagram',
+        url: 'https://www.instagram.com/felik.kr20',
+        label: 'Instagram',
       },
     ],
     contact: {
@@ -137,7 +137,7 @@ export const portfolioData: PortfolioData = {
     },
   },
 
-  // ── Responsibilities (What I Do) ─────────────────────────────────────────
+  // â”€â”€ Responsibilities (What I Do) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   responsibilities: [
     {
       id: 'resp-1',
@@ -197,7 +197,7 @@ export const portfolioData: PortfolioData = {
     },
   ],
 
-  // ── Technical Skills ─────────────────────────────────────────────────────
+  // â”€â”€ Technical Skills â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   skillCategories: [
     {
       id: 'cat-os',
@@ -278,7 +278,7 @@ export const portfolioData: PortfolioData = {
     },
   ],
 
-  // ── Work Experience ───────────────────────────────────────────────────────
+  // â”€â”€ Work Experience â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   experiences: [
     {
       id: 'exp-1',
@@ -370,14 +370,14 @@ export const portfolioData: PortfolioData = {
     },
   ],
 
-  // ── Projects ──────────────────────────────────────────────────────────────
+  // â”€â”€ Projects â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   projects: [
     {
       id: 'proj-1',
       title: 'Implementasi TMS, Petty Cash & Website System',
       category: 'Project Implementation',
       description:
-        'Menjadi PIC Project untuk tiga sistem sekaligus di PT Dino Logistics Perkasa: Tracking Management System (TMS), Petty Cash System, dan Website System—dari setup, testing, hingga go-live.',
+        'Menjadi PIC Project untuk tiga sistem sekaligus di PT Dino Logistics Perkasa: Tracking Management System (TMS), Petty Cash System, dan Website Systemâ€”dari setup, testing, hingga go-live.',
       role: 'Project PIC / IT Service Staff',
       technologies: [
         'TMS', 'Petty Cash System', 'Website System', 'Testing & QA',
@@ -434,7 +434,7 @@ export const portfolioData: PortfolioData = {
     },
   ],
 
-  // ── Tools & Technologies ──────────────────────────────────────────────────
+  // â”€â”€ Tools & Technologies â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   tools: [
     { id: 'tool-windows',     name: 'Windows',          icon: 'Monitor',      category: 'OS' },
     { id: 'tool-linux',       name: 'Linux Server',     icon: 'Terminal',     category: 'OS' },
@@ -458,3 +458,4 @@ export const portfolioData: PortfolioData = {
     { id: 'tool-db',          name: 'Database',         icon: 'Database',     category: 'Data' },
   ],
 };
+

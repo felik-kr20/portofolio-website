@@ -1,6 +1,6 @@
 "use client";
 
-import { Linkedin, Github, Mail } from 'lucide-react';
+import { Linkedin, Instagram, Mail } from 'lucide-react';
 import { PersonalInfo } from '@/data/portfolio';
 
 interface FooterProps {
@@ -17,7 +17,7 @@ const NAV_SHORTCUTS = [
 
 const socialIcons: Record<string, React.ElementType> = {
   linkedin: Linkedin,
-  github: Github,
+  instagram: Instagram,
   email: Mail,
 };
 
