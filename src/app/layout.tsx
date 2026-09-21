@@ -16,7 +16,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: 'Felik Kriswanto — IT Support Specialist',
   description:
-    'IT Support & Technical Support Specialist berbasis di Bekasi. Berpengalaman 2+ tahun dalam technical support, implementasi sistem, dan project handling.',
+    'IT Support & Technical Support Specialist berpengalaman 4+ tahun dalam technical support, implementasi sistem, dan project handling.',
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

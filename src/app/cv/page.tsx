@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { Printer } from 'lucide-react';
 
@@ -197,7 +197,7 @@ export default function CVPage() {
             <p className="section-title">RINGKASAN PROFIL</p>
             <hr className="section-divider" />
             <p style={{ fontSize: '10pt', color: '#222', lineHeight: 1.6 }}>
-              Profesional IT Support dengan pengalaman lebih dari 2 tahun di bidang IT sebagai IT Service Staff dan IT Support,
+              Profesional IT Support dengan pengalaman lebih dari 4 tahun di bidang IT sebagai IT Service Staff dan IT Support,
               dengan keahlian dalam technical support, implementasi sistem, testing aplikasi, serta penanganan project aplikasi
               seperti HRMS, POS/Kasir, TMS, dan Website System. Berpengalaman sebagai PIC project dan aplikasi, melakukan
               troubleshooting perangkat dan sistem, serta memberikan training kepada user dan client. Lulusan S1 Teknik Informatika
