@@ -332,7 +332,7 @@ export const portfolioData: PortfolioData = {
     {
       id: 'exp-3',
       jobTitle: 'IT Support',
-      company: 'PT Satu Sumber Sarana',
+      company: 'PT Lintas Teknologi Indonesia',
       location: 'Jakarta, Indonesia',
       startDate: 'Jun 2021',
       endDate: 'Okt 2021',

@@ -1,5 +1,6 @@
 ﻿'use client';
 
+import './cv.css';
 import { Printer } from 'lucide-react';
 
 const softSkills = [
@@ -55,11 +56,14 @@ const experiences = [
       'Menyiapkan dan melakukan konfigurasi perangkat pendukung operasional kerja',
       'Melakukan testing dan quality assurance aplikasi Kasir, HRMS, TMS, dan aplikasi Sales',
       'Melakukan setup serta menjadi PIC aplikasi HRMS untuk PT Thai Makmur dan PT Tri Boga Abadi',
-      'Melakukan setup aplikasi kasir untuk customer UMKM',
-      'Memberikan training penggunaan aplikasi HRMS dan kasir kepada customer/client',
-      'Menjadi PIC Project aplikasi Tracking Management System (TMS), Petty Cash System, dan Website System di PT Dino Logistics Perkasa',
-      'Melakukan standby sebagai Call Center untuk penanganan kendala teknis',
-      'Melakukan standby Host to Host untuk monitoring dan support sistem',
+      'Melakukan setup aplikasi kasir (Vireo POS) untuk customer UMKM dan memberikan training kepada customer/client',
+      'Menjadi PIC Project aplikasi TMS (Tracking Management System) di PT Dino Logistics Perkasa',
+      'Menjadi PIC Project aplikasi Petty Cash System di PT Dino Logistics Perkasa',
+      'Menjadi PIC Project Website System di PT Dino Logistics Perkasa',
+      'Melakukan testing dan implementasi proyek aplikasi Visualization Sequence Stacking for Big Part untuk PT Toyota',
+      'Menjadi PIC Project aplikasi platform Messaging Channel',
+      'Menjadi PIC Project aplikasi platform Bonusmu.id untuk PT Bintang Mahameru Utama',
+      'Melakukan standby sebagai Call Center dan Host to Host untuk monitoring dan support sistem',
     ],
   },
   {
@@ -75,7 +79,7 @@ const experiences = [
   },
   {
     title: 'IT Support',
-    company: 'PT Satu Sumber Sarana',
+    company: 'PT Lintas Teknologi Indonesia',
     period: 'Juni 2021 – Oktober 2021',
     items: [
       'Bertugas sebagai IT Support di PT Lintas Teknologi Indonesia',
@@ -97,44 +101,6 @@ const experiences = [
 export default function CVPage() {
   return (
     <>
-      <style>{`
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Calibri', 'Arial', sans-serif; background: #f0f0f0; color: #111; }
-        .cv-page { width: 210mm; min-height: 297mm; background: white; margin: 0 auto; padding: 18mm 18mm 16mm; }
-        .section-title {
-          font-size: 11pt;
-          font-weight: 700;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-          color: #111;
-          margin-bottom: 4px;
-        }
-        .section-divider {
-          border: none;
-          border-top: 1.5px solid #111;
-          margin: 0 0 10px;
-        }
-        .job-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 3px; }
-        .job-title { font-size: 10.5pt; font-weight: 700; color: #111; }
-        .job-company { font-size: 10pt; color: #444; }
-        .job-period { font-size: 10pt; color: #444; white-space: nowrap; flex-shrink: 0; margin-left: 8px; font-style: italic; }
-        .bullet-list { padding-left: 16px; margin: 4px 0 0; }
-        .bullet-list li { font-size: 10pt; color: #222; line-height: 1.5; margin-bottom: 2px; }
-        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; }
-        .skill-item { font-size: 10pt; color: #222; line-height: 1.6; padding-left: 16px; position: relative; }
-        .skill-item::before { content: "•"; position: absolute; left: 4px; color: #111; }
-        .cert-issuer { font-size: 10pt; font-weight: 700; color: #111; margin-bottom: 3px; }
-        .cert-item { font-size: 10pt; color: #222; line-height: 1.5; padding-left: 16px; position: relative; margin-bottom: 2px; }
-        .cert-item::before { content: "•"; position: absolute; left: 4px; }
-        .cert-date { color: #555; font-style: italic; }
-        @media print {
-          .no-print { display: none !important; }
-          body { background: white; }
-          .cv-page { padding: 18mm 18mm 16mm; width: 100%; }
-          @page { margin: 0; size: A4 portrait; }
-        }
-      `}</style>
-
       {/* ── Toolbar (hidden on print) ── */}
       <div className="no-print" style={{
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
@@ -180,8 +146,8 @@ export default function CVPage() {
         }}>
 
           {/* ── HEADER ── */}
-          <div style={{ textAlign: 'center', marginBottom: '14px' }}>
-            <h1 style={{ fontSize: '20pt', fontWeight: 700, letterSpacing: '1px', color: '#111', marginBottom: '2px' }}>
+          <div style={{ textAlign: 'center', marginBottom: '10px' }}>
+            <h1 style={{ fontSize: '17pt', fontWeight: 700, letterSpacing: '1px', color: '#111', marginBottom: '2px' }}>
               FELIK KRISWANTO
             </h1>
             <p style={{ fontSize: '11pt', fontWeight: 400, color: '#333', marginBottom: '6px' }}>
@@ -193,7 +159,7 @@ export default function CVPage() {
           </div>
 
           {/* ── RINGKASAN PROFIL ── */}
-          <div style={{ marginBottom: '14px' }}>
+          <div style={{ marginBottom: '10px' }}>
             <p className="section-title">RINGKASAN PROFIL</p>
             <hr className="section-divider" />
             <p style={{ fontSize: '10pt', color: '#222', lineHeight: 1.6 }}>
@@ -207,10 +173,10 @@ export default function CVPage() {
           </div>
 
           {/* ── PENGALAMAN KERJA ── */}
-          <div style={{ marginBottom: '14px' }}>
+          <div style={{ marginBottom: '10px' }}>
             <p className="section-title">PENGALAMAN KERJA</p>
             <hr className="section-divider" />
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '7px' }}>
               {experiences.map((exp, i) => (
                 <div key={i}>
                   <div className="job-header">
@@ -231,10 +197,10 @@ export default function CVPage() {
           </div>
 
           {/* ── PENDIDIKAN ── */}
-          <div style={{ marginBottom: '14px' }}>
+          <div style={{ marginBottom: '10px' }}>
             <p className="section-title">PENDIDIKAN</p>
             <hr className="section-divider" />
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
               <div className="job-header">
                 <div>
                   <span className="job-title">S1 Teknik Informatika (Networking), </span>
@@ -242,7 +208,7 @@ export default function CVPage() {
                 </div>
                 <span className="job-period">2016–2020</span>
               </div>
-              <p style={{ fontSize: '10pt', color: '#444', paddingLeft: '0', marginTop: '-2px' }}>
+              <p style={{ fontSize: '9.5pt', color: '#444', paddingLeft: '0', marginTop: '-3px', marginBottom: '2px' }}>
                 &#160;&#160;IPK: 3,61
               </p>
               <div className="job-header">
@@ -252,11 +218,25 @@ export default function CVPage() {
                 </div>
                 <span className="job-period">2013–2016</span>
               </div>
+              <div className="job-header">
+                <div>
+                  <span className="job-title">SMP Negeri 10 Kota Bekasi, </span>
+                  <span className="job-company">Kota Bekasi, Jawa Barat</span>
+                </div>
+                <span className="job-period">2010–2013</span>
+              </div>
+              <div className="job-header">
+                <div>
+                  <span className="job-title">SD Negeri Padurenan 1, </span>
+                  <span className="job-company">Bekasi, Jawa Barat</span>
+                </div>
+                <span className="job-period">2004–2010</span>
+              </div>
             </div>
           </div>
 
           {/* ── SERTIFIKASI ── */}
-          <div style={{ marginBottom: '14px' }}>
+          <div style={{ marginBottom: '10px' }}>
             <p className="section-title">SERTIFIKASI</p>
             <hr className="section-divider" />
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>

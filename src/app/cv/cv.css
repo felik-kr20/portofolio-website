@@ -1,0 +1,77 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Calibri', 'Arial', sans-serif;
+  background: #f0f0f0;
+  color: #111;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.cv-page {
+  width: 210mm;
+  background: white;
+  margin: 0 auto;
+  padding: 10mm 16mm 8mm;
+  font-size: 9.5pt;
+  line-height: 1.4;
+}
+
+.sec-title {
+  font-size: 10pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: #111;
+  margin-bottom: 2px;
+}
+
+.sec-line {
+  border: none;
+  border-top: 1.5px solid #111;
+  margin: 0 0 7px;
+}
+
+.job-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+
+.job-title  { font-size: 9.5pt; font-weight: 700; color: #111; }
+.job-co     { font-size: 9pt;   color: #444; }
+.job-period { font-size: 9pt;   color: #444; white-space: nowrap; flex-shrink: 0; font-style: italic; }
+
+.blist { padding-left: 14px; margin: 2px 0 0; }
+.blist li { font-size: 9pt; color: #222; line-height: 1.45; margin-bottom: 1px; }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 0 20px; }
+.skill-sub { font-size: 9.5pt; font-weight: 700; color: #111; margin-bottom: 3px; }
+.skill-item { font-size: 9pt; color: #222; line-height: 1.45; padding-left: 13px; position: relative; margin-bottom: 1px; }
+.skill-item::before { content: "•"; position: absolute; left: 3px; color: #111; }
+
+.cert-issuer { font-size: 9.5pt; font-weight: 700; color: #111; margin-bottom: 2px; }
+.cert-item   { font-size: 9pt; color: #222; line-height: 1.45; padding-left: 13px; position: relative; margin-bottom: 1px; }
+.cert-item::before { content: "•"; position: absolute; left: 3px; }
+.cert-date   { color: #555; font-style: italic; }
+
+.no-print { display: block; }
+
+@media print {
+  .no-print  { display: none !important; }
+  body       { background: white !important; }
+  .cv-page   { padding: 10mm 16mm 8mm; width: 100%; box-shadow: none !important; }
+  @page      { margin: 0; size: A4 portrait; }
+}
+
+/* ── Legacy class aliases (backward compat) ── */
+.section-title  { font-size: 10pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: #111; margin-bottom: 2px; }
+.section-divider { border: none; border-top: 1.5px solid #111; margin: 0 0 7px; }
+.job-header  { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 2px; }
+.job-title   { font-size: 9.5pt; font-weight: 700; color: #111; }
+.job-company { font-size: 9pt; color: #444; }
+.job-period  { font-size: 9pt; color: #444; white-space: nowrap; flex-shrink: 0; font-style: italic; }
+.bullet-list { padding-left: 14px; margin: 2px 0 0; }
+.bullet-list li { font-size: 9pt; color: #222; line-height: 1.45; margin-bottom: 1px; }
