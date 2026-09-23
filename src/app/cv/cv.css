@@ -1,4 +1,4 @@
-* { box-sizing: border-box; margin: 0; padding: 0; }
+﻿* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
   font-family: 'Calibri', 'Arial', sans-serif;
@@ -75,3 +75,23 @@ body {
 .job-period  { font-size: 9pt; color: #444; white-space: nowrap; flex-shrink: 0; font-style: italic; }
 .bullet-list { padding-left: 14px; margin: 2px 0 0; }
 .bullet-list li { font-size: 9pt; color: #222; line-height: 1.45; margin-bottom: 1px; }
+
+/* ── Page break ── */
+.page-break-before {
+  page-break-before: always;
+  break-before: page;
+}
+
+@media screen {
+  .page-break-before {
+    border-top: 2px dashed #ccc;
+    margin-top: 20px;
+    padding-top: 16px;
+  }
+}
+
+@media print {
+  .page-break-before {
+    padding-top: 25mm;
+  }
+}

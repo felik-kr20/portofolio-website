@@ -197,7 +197,7 @@ export default function CVPage() {
           </div>
 
           {/* ── PENDIDIKAN ── */}
-          <div style={{ marginBottom: '10px' }}>
+          <div className="page-break-before" style={{ marginBottom: '10px' }}>
             <p className="section-title">PENDIDIKAN</p>
             <hr className="section-divider" />
             <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
