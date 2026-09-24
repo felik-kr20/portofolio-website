@@ -1,6 +1,6 @@
 ﻿'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Download, ArrowRight, Briefcase, CheckCircle,
@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePageView, trackClick } from '@/hooks/useTracker';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -145,6 +146,16 @@ export default function Home() {
   const [showPhotoModal, setShowPhotoModal] = useState(false);
 
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
+  usePageView();
+
+  const [openToWork, setOpenToWork] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/settings?key=open_to_opportunities')
+      .then(r => r.json())
+      .then(d => setOpenToWork(d.value === 'true'))
+      .catch(() => {}); // default true jika gagal
+  }, []);
 
   const handleCopy = (text: string, key: string) => {
     navigator.clipboard.writeText(text).then(() => {
@@ -181,11 +192,17 @@ export default function Home() {
                 <motion.div
                   custom={1} initial="hidden" animate="visible" variants={fadeUp}
                   className="inline-flex items-center gap-2 mb-6 px-3.5 py-1.5 rounded-full"
-                  style={{ background: 'rgba(0,200,255,0.1)', border: '1px solid rgba(0,200,255,0.3)' }}
+                  style={{
+                    background: openToWork ? 'rgba(0,200,255,0.1)' : 'rgba(100,116,139,0.1)',
+                    border: openToWork ? '1px solid rgba(0,200,255,0.3)' : '1px solid rgba(100,116,139,0.3)',
+                  }}
                 >
-                  <span className="w-2 h-2 rounded-full" style={{ background: '#10b981', boxShadow: '0 0 6px #10b981' }} />
-                  <span className="text-xs font-semibold tracking-wide" style={{ color: '#00c8ff' }}>
-                    Open to Opportunities
+                  <span className="w-2 h-2 rounded-full" style={{
+                    background: openToWork ? '#10b981' : '#94a3b8',
+                    boxShadow: openToWork ? '0 0 6px #10b981' : 'none',
+                  }} />
+                  <span className="text-xs font-semibold tracking-wide" style={{ color: openToWork ? '#00c8ff' : '#94a3b8' }}>
+                    {openToWork ? 'Open to Opportunities' : 'Not Available'}
                   </span>
                 </motion.div>
 
@@ -284,7 +301,8 @@ export default function Home() {
                     className="flex items-center gap-1.5 text-sm transition-colors"
                     style={{ color: '#64748b', textDecoration: 'none' }}
                     onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = '#ec4899'}
-                    onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = '#64748b'}>
+                    onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = '#64748b'}
+                    onClick={() => trackClick('instagram')}>
                     <InstagramIcon size={14} />
                     felik.kr20
                   </a>
@@ -293,7 +311,8 @@ export default function Home() {
                     className="flex items-center gap-1.5 text-sm transition-colors"
                     style={{ color: '#64748b', textDecoration: 'none' }}
                     onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = '#38bdf8'}
-                    onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = '#64748b'}>
+                    onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = '#64748b'}
+                    onClick={() => trackClick('linkedin')}>
                     <Linkedin size={14} />
                     felikriswanto
                   </a>
