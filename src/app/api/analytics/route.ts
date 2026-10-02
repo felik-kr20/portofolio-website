@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getViews, getClicks, getLast7DaysViews } from '@/lib/analytics-store';
+import { getEnvFromHost } from '@/lib/supabase';
 
-// Generate semua tanggal dalam range dengan count default 0
 function fillDateRange(
   from: string,
   to: string,
@@ -9,13 +9,10 @@ function fillDateRange(
 ): { date: string; count: number }[] {
   const map = new Map(data.map(d => [d.date, d.count]));
   const result: { date: string; count: number }[] = [];
-
   const [fy, fm, fd] = from.split('-').map(Number);
   const [ty, tm, td] = to.split('-').map(Number);
-  const start = new Date(fy, fm - 1, fd);
-  const end   = new Date(ty, tm - 1, td);
-
-  const cur = new Date(start);
+  const cur = new Date(fy, fm - 1, fd);
+  const end = new Date(ty, tm - 1, td);
   while (cur <= end) {
     const y = cur.getFullYear();
     const m = String(cur.getMonth() + 1).padStart(2, '0');
@@ -24,11 +21,11 @@ function fillDateRange(
     result.push({ date: dateStr, count: map.get(dateStr) ?? 0 });
     cur.setDate(cur.getDate() + 1);
   }
-
   return result;
 }
 
 export async function GET(req: NextRequest) {
+  const env = getEnvFromHost(req.headers.get('host'));
   const { searchParams } = new URL(req.url);
   const from = searchParams.get('from') ?? (() => {
     const d = new Date(); d.setDate(d.getDate() - 29);
@@ -40,20 +37,17 @@ export async function GET(req: NextRequest) {
   })();
 
   const [rawViews, clicks, last7] = await Promise.all([
-    getViews(from, to),
-    getClicks(from, to),
-    getLast7DaysViews(),
+    getViews(from, to, env),
+    getClicks(from, to, env),
+    getLast7DaysViews(env),
   ]);
 
-  // Fill semua hari dalam range (hari tanpa data = 0)
   const views = fillDateRange(from, to, rawViews);
-
   const totalViews = views.reduce((s, v) => s + v.count, 0);
   const [fy, fm, fd] = from.split('-').map(Number);
   const [ty, tm, td] = to.split('-').map(Number);
-  const msPerDay = 86400000;
-  const diffDays = Math.round((new Date(ty, tm-1, td).getTime() - new Date(fy, fm-1, fd).getTime()) / msPerDay);
-  const days     = Math.max(1, diffDays + 1);
+  const diffDays = Math.round((new Date(ty, tm-1, td).getTime() - new Date(fy, fm-1, fd).getTime()) / 86400000);
+  const days = Math.max(1, diffDays + 1);
   const avgViews = Math.round((totalViews / days) * 10) / 10;
 
   const totalClicks = {
@@ -64,5 +58,6 @@ export async function GET(req: NextRequest) {
     linkedin:  clicks.reduce((s, c) => s + c.linkedin, 0),
   };
 
-  return NextResponse.json({ views, clicks, last7, totalViews, avgViews, totalClicks, from, to });
+  // Kirim juga env ke client untuk debug di dashboard
+  return NextResponse.json({ views, clicks, last7, totalViews, avgViews, totalClicks, from, to, env });
 }

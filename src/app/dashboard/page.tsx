@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -23,6 +23,7 @@ interface AnalyticsData {
   totalClicks: ClickTotals;
   from: string;
   to: string;
+  env?: string;
 }
 
 // ─── Instagram SVG icon ───────────────────────────────────────────────────────
@@ -187,15 +188,24 @@ function DateRangePicker({
   const [activePreset, setActivePreset] = useState('');
   const [cal1, setCal1] = useState({ year: new Date().getFullYear(), month: new Date().getMonth() - 1 });
   const [cal2, setCal2] = useState({ year: new Date().getFullYear(), month: new Date().getMonth() });
+  const [isMobile, setIsMobile] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 640);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+
+  useEffect(() => {
+    if (isMobile) return; // mobile uses full overlay, no outside-click needed
     const handler = (e: MouseEvent) => {
       if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
     };
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
-  }, []);
+  }, [isMobile]);
 
   const openPicker = () => {
     setTempFrom(parseDate(from)); setTempTo(parseDate(to));
@@ -219,9 +229,7 @@ function DateRangePicker({
   };
 
   const apply = () => {
-    if (tempFrom && tempTo) {
-      onChange(toDateStr(tempFrom), toDateStr(tempTo));
-    }
+    if (tempFrom && tempTo) onChange(toDateStr(tempFrom), toDateStr(tempTo));
     setOpen(false);
   };
 
@@ -251,111 +259,245 @@ function DateRangePicker({
   const rangeStart = tempFrom && !tempTo ? tempFrom : (tempFrom && tempTo ? (tempFrom <= tempTo ? tempFrom : tempTo) : null);
   const rangeEnd   = tempFrom && tempTo  ? (tempFrom <= tempTo ? tempTo : tempFrom) : null;
 
-  return (
-    <div className="relative" ref={ref}>
-      <button
-        onClick={openPicker}
-        className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all hover:bg-slate-50"
-        style={{ background: 'white', border: '1px solid #e2e8f0', color: '#334155', boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}
-      >
-        <CalendarDays size={14} style={{ color: '#4f46e5' }} />
-        {fmtDisplay(parseDate(from))} – {fmtDisplay(parseDate(to))}
-        <ChevronRight size={12} style={{ color: '#94a3b8', transform: open ? 'rotate(90deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }} />
-      </button>
-
-      <AnimatePresence>
-        {open && (
+  // ── Mobile bottom-sheet ───────────────────────────────────────────────────
+  const mobileSheet = (
+    <AnimatePresence>
+      {open && (
+        <>
+          {/* backdrop */}
           <motion.div
-            initial={{ opacity: 0, y: 8, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 8, scale: 0.98 }}
-            transition={{ duration: 0.18 }}
-            className="absolute right-0 top-full mt-2 z-50 flex"
-            style={{ background: 'white', border: '1px solid #e2e8f0', borderRadius: 16, boxShadow: '0 16px 48px rgba(0,0,0,0.14)', overflow: 'hidden' }}
+            key="backdrop"
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={() => setOpen(false)}
+            style={{
+              position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)',
+              zIndex: 998, touchAction: 'none',
+            }}
+          />
+          {/* sheet */}
+          <motion.div
+            key="sheet"
+            initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }}
+            transition={{ type: 'spring', damping: 28, stiffness: 280 }}
+            style={{
+              position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 999,
+              background: 'white', borderRadius: '20px 20px 0 0',
+              maxHeight: '90vh', display: 'flex', flexDirection: 'column',
+              boxShadow: '0 -8px 40px rgba(0,0,0,0.15)',
+            }}
           >
-            {/* Calendars */}
-            <div className="p-4 flex gap-8">
-              {/* Tanggal fields */}
-              <div className="flex flex-col gap-4">
-                <div className="flex gap-3">
-                  <div>
-                    <p className="text-xs text-slate-400 mb-1">Dari</p>
-                    <div
-                      onClick={() => setPicking('from')}
-                      className="flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer text-sm"
-                      style={{ border: `1.5px solid ${picking==='from' ? '#4f46e5' : '#e2e8f0'}`, background: '#f8fafc', minWidth: 130 }}
-                    >
-                      <CalendarDays size={13} style={{ color: '#4f46e5' }} />
-                      <span style={{ color: '#334155' }}>{tempFrom ? fmtDisplay(tempFrom) : '--'}</span>
-                    </div>
-                  </div>
-                  <div>
-                    <p className="text-xs text-slate-400 mb-1">Sampai</p>
-                    <div
-                      onClick={() => setPicking('to')}
-                      className="flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer text-sm"
-                      style={{ border: `1.5px solid ${picking==='to' ? '#4f46e5' : '#e2e8f0'}`, background: '#f8fafc', minWidth: 130 }}
-                    >
-                      <CalendarDays size={13} style={{ color: '#4f46e5' }} />
-                      <span style={{ color: '#334155' }}>{tempTo ? fmtDisplay(tempTo) : '--'}</span>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex gap-8">
-                  <MiniCalendar
-                    year={cal1.year} month={cal1.month}
-                    selected={picking === 'from' ? tempFrom : tempTo}
-                    rangeStart={rangeStart} rangeEnd={rangeEnd}
-                    onSelect={handleCalSelect} onPrev={prevCal1}
-                    onNext={() => { const m = cal1.month===11?0:cal1.month+1; const y=cal1.month===11?cal1.year+1:cal1.year; setCal1({year:y,month:m}); }}
-                  />
-                  <MiniCalendar
-                    year={cal2.year} month={cal2.month}
-                    selected={picking === 'from' ? tempFrom : tempTo}
-                    rangeStart={rangeStart} rangeEnd={rangeEnd}
-                    onSelect={handleCalSelect}
-                    onPrev={() => { const m=cal2.month===0?11:cal2.month-1; const y=cal2.month===0?cal2.year-1:cal2.year; setCal2({year:y,month:m}); }}
-                    onNext={nextCal2}
-                  />
-                </div>
-                {/* Apply / Cancel */}
-                <div className="flex justify-end gap-2 pt-1 border-t" style={{ borderColor: '#f1f5f9' }}>
-                  <button onClick={() => setOpen(false)}
-                    className="px-4 py-1.5 rounded-lg text-sm font-medium transition hover:bg-slate-100"
-                    style={{ color: '#64748b' }}>Batal</button>
-                  <button onClick={apply}
-                    className="px-4 py-1.5 rounded-lg text-sm font-semibold text-white transition"
-                    style={{ background: 'linear-gradient(135deg, #4f46e5, #7c3aed)', boxShadow: '0 4px 12px rgba(79,70,229,0.25)' }}>
-                    Terapkan
-                  </button>
-                </div>
-              </div>
+            {/* drag handle */}
+            <div style={{ display: 'flex', justifyContent: 'center', padding: '10px 0 4px' }}>
+              <div style={{ width: 40, height: 4, borderRadius: 2, background: '#e2e8f0' }} />
+            </div>
 
-              {/* Presets */}
-              <div className="flex flex-col gap-1 pt-6" style={{ minWidth: 140, borderLeft: '1px solid #f1f5f9', paddingLeft: 16 }}>
+            {/* title */}
+            <div style={{ padding: '8px 20px 12px', borderBottom: '1px solid #f1f5f9' }}>
+              <p style={{ fontSize: 15, fontWeight: 700, color: '#0f172a' }}>Pilih Periode</p>
+            </div>
+
+            <div style={{ overflowY: 'auto', flex: 1, padding: '16px 20px 0' }}>
+              {/* Preset pills — horizontal scroll */}
+              <div style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 4,
+                scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' }}>
                 {presets.map(p => (
                   <button
                     key={p.key}
                     onClick={() => applyPreset(p.key)}
-                    className="text-left px-3 py-2 rounded-lg text-sm transition-all"
                     style={{
-                      background: activePreset === p.key ? '#4f46e5' : 'transparent',
+                      flexShrink: 0,
+                      padding: '6px 14px',
+                      borderRadius: 20,
+                      fontSize: 12,
+                      fontWeight: activePreset === p.key ? 700 : 500,
+                      background: activePreset === p.key ? '#4f46e5' : '#f1f5f9',
                       color: activePreset === p.key ? 'white' : '#334155',
-                      fontWeight: activePreset === p.key ? 600 : 400,
+                      border: 'none', cursor: 'pointer',
+                      transition: 'all 0.15s',
                     }}
                   >
                     {p.label}
                   </button>
                 ))}
               </div>
+
+              {/* From / To fields */}
+              <div style={{ display: 'flex', gap: 10, marginTop: 16 }}>
+                {[{ label: 'Dari', val: tempFrom, mode: 'from' as const }, { label: 'Sampai', val: tempTo, mode: 'to' as const }].map(({ label, val, mode }) => (
+                  <div key={mode} style={{ flex: 1 }}
+                    onClick={() => setPicking(mode)}>
+                    <p style={{ fontSize: 11, color: '#94a3b8', marginBottom: 4 }}>{label}</p>
+                    <div style={{
+                      display: 'flex', alignItems: 'center', gap: 6,
+                      padding: '8px 12px', borderRadius: 10, cursor: 'pointer',
+                      border: picking === mode ? '1.5px solid #4f46e5' : '1.5px solid #e2e8f0',
+                      background: '#f8fafc',
+                    }}>
+                      <CalendarDays size={13} style={{ color: '#4f46e5', flexShrink: 0 }} />
+                      <span style={{ fontSize: 12, color: '#334155', fontWeight: 600 }}>
+                        {val ? fmtDisplay(val) : '--'}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Picking indicator */}
+              <p style={{ fontSize: 11, color: '#4f46e5', marginTop: 8, fontWeight: 600 }}>
+                {picking === 'from' ? 'Pilih tanggal mulai ↓' : 'Pilih tanggal akhir ↓'}
+              </p>
+
+              {/* Single calendar — full width */}
+              <div style={{ marginTop: 8, display: 'flex', justifyContent: 'center' }}>
+                <div style={{ width: '100%', maxWidth: 320 }}>
+                  <MiniCalendar
+                    year={cal2.year} month={cal2.month}
+                    selected={picking === 'from' ? tempFrom : tempTo}
+                    rangeStart={rangeStart} rangeEnd={rangeEnd}
+                    onSelect={handleCalSelect}
+                    onPrev={() => {
+                      const m = cal2.month === 0 ? 11 : cal2.month - 1;
+                      const y = cal2.month === 0 ? cal2.year - 1 : cal2.year;
+                      setCal2({ year: y, month: m });
+                    }}
+                    onNext={() => {
+                      const m = cal2.month === 11 ? 0 : cal2.month + 1;
+                      const y = cal2.month === 11 ? cal2.year + 1 : cal2.year;
+                      setCal2({ year: y, month: m });
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Footer buttons */}
+            <div style={{
+              display: 'flex', gap: 10, padding: '14px 20px',
+              borderTop: '1px solid #f1f5f9',
+              background: 'white',
+            }}>
+              <button onClick={() => setOpen(false)} style={{
+                flex: 1, padding: '11px 0', borderRadius: 12, fontSize: 13,
+                fontWeight: 600, color: '#64748b',
+                background: '#f1f5f9', border: 'none', cursor: 'pointer',
+              }}>Batal</button>
+              <button onClick={apply} style={{
+                flex: 2, padding: '11px 0', borderRadius: 12, fontSize: 13,
+                fontWeight: 700, color: 'white',
+                background: 'linear-gradient(135deg, #4f46e5, #7c3aed)',
+                boxShadow: '0 4px 12px rgba(79,70,229,0.3)',
+                border: 'none', cursor: 'pointer',
+                opacity: tempFrom && tempTo ? 1 : 0.5,
+              }}>Terapkan</button>
             </div>
           </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+        </>
+      )}
+    </AnimatePresence>
+  );
+
+  // ── Desktop dropdown ──────────────────────────────────────────────────────
+  const desktopDropdown = (
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          initial={{ opacity: 0, y: 8, scale: 0.98 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 8, scale: 0.98 }}
+          transition={{ duration: 0.18 }}
+          className="absolute right-0 top-full mt-2 z-50 flex"
+          style={{ background: 'white', border: '1px solid #e2e8f0', borderRadius: 16, boxShadow: '0 16px 48px rgba(0,0,0,0.14)', overflow: 'hidden' }}
+        >
+          <div className="p-4 flex gap-8">
+            <div className="flex flex-col gap-4">
+              <div className="flex gap-3">
+                <div>
+                  <p className="text-xs text-slate-400 mb-1">Dari</p>
+                  <div onClick={() => setPicking('from')}
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer text-sm"
+                    style={{ border: picking==='from' ? '1.5px solid #4f46e5' : '1.5px solid #e2e8f0', background: '#f8fafc', minWidth: 130 }}>
+                    <CalendarDays size={13} style={{ color: '#4f46e5' }} />
+                    <span style={{ color: '#334155' }}>{tempFrom ? fmtDisplay(tempFrom) : '--'}</span>
+                  </div>
+                </div>
+                <div>
+                  <p className="text-xs text-slate-400 mb-1">Sampai</p>
+                  <div onClick={() => setPicking('to')}
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer text-sm"
+                    style={{ border: picking==='to' ? '1.5px solid #4f46e5' : '1.5px solid #e2e8f0', background: '#f8fafc', minWidth: 130 }}>
+                    <CalendarDays size={13} style={{ color: '#4f46e5' }} />
+                    <span style={{ color: '#334155' }}>{tempTo ? fmtDisplay(tempTo) : '--'}</span>
+                  </div>
+                </div>
+              </div>
+              <div className="flex gap-8">
+                <MiniCalendar
+                  year={cal1.year} month={cal1.month}
+                  selected={picking === 'from' ? tempFrom : tempTo}
+                  rangeStart={rangeStart} rangeEnd={rangeEnd}
+                  onSelect={handleCalSelect} onPrev={prevCal1}
+                  onNext={() => { const m = cal1.month===11?0:cal1.month+1; const y=cal1.month===11?cal1.year+1:cal1.year; setCal1({year:y,month:m}); }}
+                />
+                <MiniCalendar
+                  year={cal2.year} month={cal2.month}
+                  selected={picking === 'from' ? tempFrom : tempTo}
+                  rangeStart={rangeStart} rangeEnd={rangeEnd}
+                  onSelect={handleCalSelect}
+                  onPrev={() => { const m=cal2.month===0?11:cal2.month-1; const y=cal2.month===0?cal2.year-1:cal2.year; setCal2({year:y,month:m}); }}
+                  onNext={nextCal2}
+                />
+              </div>
+              <div className="flex justify-end gap-2 pt-1 border-t" style={{ borderColor: '#f1f5f9' }}>
+                <button onClick={() => setOpen(false)}
+                  className="px-4 py-1.5 rounded-lg text-sm font-medium transition hover:bg-slate-100"
+                  style={{ color: '#64748b' }}>Batal</button>
+                <button onClick={apply}
+                  className="px-4 py-1.5 rounded-lg text-sm font-semibold text-white transition"
+                  style={{ background: 'linear-gradient(135deg, #4f46e5, #7c3aed)', boxShadow: '0 4px 12px rgba(79,70,229,0.25)' }}>
+                  Terapkan
+                </button>
+              </div>
+            </div>
+            <div className="flex flex-col gap-1 pt-6" style={{ minWidth: 140, borderLeft: '1px solid #f1f5f9', paddingLeft: 16 }}>
+              {presets.map(p => (
+                <button key={p.key} onClick={() => applyPreset(p.key)}
+                  className="text-left px-3 py-2 rounded-lg text-sm transition-all"
+                  style={{
+                    background: activePreset === p.key ? '#4f46e5' : 'transparent',
+                    color: activePreset === p.key ? 'white' : '#334155',
+                    fontWeight: activePreset === p.key ? 600 : 400,
+                  }}>
+                  {p.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+
+  return (
+    <>
+      {/* Mobile: portal-style fixed elements rendered at body level via state */}
+      {isMobile && mobileSheet}
+
+      <div className="relative" ref={ref}>
+        <button
+          onClick={openPicker}
+          className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all hover:bg-slate-50"
+          style={{ background: 'white', border: '1px solid #e2e8f0', color: '#334155', boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}
+        >
+          <CalendarDays size={14} style={{ color: '#4f46e5' }} />
+          {fmtDisplay(parseDate(from))} – {fmtDisplay(parseDate(to))}
+          <ChevronRight size={12} style={{ color: '#94a3b8', transform: open ? 'rotate(90deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }} />
+        </button>
+        {!isMobile && desktopDropdown}
+      </div>
+    </>
   );
 }
-
 // ─── Custom tooltip ───────────────────────────────────────────────────────────
 const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?: { value: number }[]; label?: string }) => {
   if (active && payload?.length) {
@@ -450,7 +592,7 @@ export default function DashboardPage() {
               background: isLive ? '#dcfce7' : '#fef9c3',
               color: isLive ? '#15803d' : '#92400e',
             }}>
-              {isLive ? '● LIVE' : '● DEV'}
+              {isLive ? '● LIVE' : '● DEV'}{data?.env ? ` (${data.env})` : ''}
             </span>
           </div>
           <div className="flex items-center gap-2">
