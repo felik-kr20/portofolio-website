@@ -395,7 +395,7 @@ export default function Home() {
                     style={{ border: '1.5px solid #e2e8f0', background: '#f8fafc' }}>
                     <a
                       href="mailto:felik103@gmail.com"
-                      onClick={() => setShowContactModal(false)}
+                      onClick={() => { setShowContactModal(false); trackClick('email'); }}
                       className="flex items-center gap-3 flex-1 min-w-0"
                       style={{ textDecoration: 'none' }}
                     >
@@ -428,7 +428,7 @@ export default function Home() {
                     <a
                       href="https://wa.me/628997671236"
                       target="_blank" rel="noopener noreferrer"
-                      onClick={() => setShowContactModal(false)}
+                      onClick={() => { setShowContactModal(false); trackClick('whatsapp'); }}
                       className="flex items-center gap-3 flex-1 min-w-0"
                       style={{ textDecoration: 'none' }}
                     >
@@ -461,6 +461,7 @@ export default function Home() {
                     <a
                       href="https://maps.app.goo.gl/uqjJA3jEqLzDSdB88"
                       target="_blank" rel="noopener noreferrer"
+                      onClick={() => trackClick('address')}
                       className="flex items-center gap-3 flex-1 min-w-0"
                       style={{ textDecoration: 'none' }}
                     >

@@ -59,17 +59,26 @@ const CLICK_META = [
 ] as const;
 
 // ─── Date helpers ─────────────────────────────────────────────────────────────
-function toDateStr(d: Date) { return d.toISOString().slice(0, 10); }
-function parseDate(s: string) { return new Date(s + 'T00:00:00'); }
+function toDateStr(d: Date) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+function parseDate(s: string) {
+  const [y, m, d] = s.split('-').map(Number);
+  return new Date(y, m - 1, d);
+}
 function fmtDisplay(d: Date) {
   return d.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' });
 }
 function fmtFull(s: string) {
-  return new Date(s).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+  const [y, m, d] = s.split('-').map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 function fmtChart(date: string) {
-  const d = new Date(date);
-  return `${d.getDate()}/${d.getMonth() + 1}`;
+  const [, m, d] = date.split('-').map(Number);
+  return `${d}/${m}`;
 }
 
 const MONTH_NAMES = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
@@ -371,6 +380,12 @@ export default function DashboardPage() {
   const [loading, setLoading]     = useState(true);
   const [openToWork, setOpenToWork] = useState<boolean | null>(null);
   const [savingOtw, setSavingOtw] = useState(false);
+  const [isLive, setIsLive] = useState(false);
+  useEffect(() => {
+    // Production jika bukan localhost/127.0.0.1
+    const hostname = window.location.hostname;
+    setIsLive(hostname !== 'localhost' && hostname !== '127.0.0.1' && !hostname.startsWith('192.168'));
+  }, []);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -432,10 +447,10 @@ export default function DashboardPage() {
             <span style={{ color: '#4f46e5', fontWeight: 700, fontSize: 14 }}>Dashboard Analytics</span>
             <span style={{
               fontSize: 10, fontWeight: 600, padding: '2px 8px', borderRadius: 20,
-              background: process.env.NEXT_PUBLIC_APP_ENV === 'production' ? '#dcfce7' : '#fef9c3',
-              color: process.env.NEXT_PUBLIC_APP_ENV === 'production' ? '#15803d' : '#92400e',
+              background: isLive ? '#dcfce7' : '#fef9c3',
+              color: isLive ? '#15803d' : '#92400e',
             }}>
-              {process.env.NEXT_PUBLIC_APP_ENV === 'production' ? '● LIVE' : '● DEV'}
+              {isLive ? '● LIVE' : '● DEV'}
             </span>
           </div>
           <div className="flex items-center gap-2">
@@ -569,10 +584,15 @@ export default function DashboardPage() {
             className="rounded-2xl p-6"
             style={{ background: 'white', border: '1px solid #e2e8f0', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
             <h2 className="text-sm font-bold mb-1" style={{ color: '#0f172a' }}>Klik Kontak &amp; Sosial</h2>
-            <p className="text-xs mb-4" style={{ color: '#94a3b8' }}>
+            <p className="text-xs mb-2" style={{ color: '#94a3b8' }}>
               Distribusi klik Email, WhatsApp, Alamat, Instagram &amp; LinkedIn
             </p>
-            {pieData.length > 0 ? (
+            {data && (
+              <p className="text-xs mb-3 font-mono" style={{ color: '#cbd5e1' }}>
+                E:{data.totalClicks.email} W:{data.totalClicks.whatsapp} A:{data.totalClicks.address} IG:{data.totalClicks.instagram} LI:{data.totalClicks.linkedin}
+              </p>
+            )}
+            {data && (data.totalClicks.email + data.totalClicks.whatsapp + data.totalClicks.address + data.totalClicks.instagram + data.totalClicks.linkedin) > 0 ? (
               <div className="flex items-center gap-4">
                 <ResponsiveContainer width="50%" height={180}>
                   <PieChart>
