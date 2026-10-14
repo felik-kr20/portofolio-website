@@ -1,7 +1,9 @@
 ﻿'use client';
 
+import { useState } from 'react';
 import './cv.css';
 import { Printer } from 'lucide-react';
+import { CVEmailModal } from '@/components/ui/CVEmailModal';
 
 const softSkills = [
   'Manajemen waktu dan penentuan prioritas kerja',
@@ -99,8 +101,12 @@ const experiences = [
 ];
 
 export default function CVPage() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <>
+      <CVEmailModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+
       {/* ── Toolbar (hidden on print) ── */}
       <div className="no-print" style={{
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
@@ -120,7 +126,7 @@ export default function CVPage() {
             Klik tombol &#8594; pilih <strong style={{ color: '#334155' }}>Save as PDF</strong>
           </span>
           <button
-            onClick={() => window.print()}
+            onClick={() => setIsModalOpen(true)}
             style={{
               display: 'inline-flex', alignItems: 'center', gap: '8px',
               padding: '9px 20px', borderRadius: '10px', border: 'none',

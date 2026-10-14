@@ -8,7 +8,7 @@ import {
 } from 'recharts';
 import {
   Eye, TrendingUp, Calendar, Mail, MapPin, RefreshCw,
-  ChevronLeft, ChevronRight, CalendarDays, ToggleLeft, ToggleRight, Linkedin,
+  ChevronLeft, ChevronRight, CalendarDays, ToggleLeft, ToggleRight, Linkedin, Users,
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -529,6 +529,7 @@ export default function DashboardPage() {
     setIsLive(hostname !== 'localhost' && hostname !== '127.0.0.1' && !hostname.startsWith('192.168'));
   }, []);
 
+
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
@@ -785,6 +786,30 @@ export default function DashboardPage() {
             )}
           </motion.div>
         </div>
+
+
+        {/* ── Link to Recruiter Page ── */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
+          className="rounded-2xl p-5 flex items-center justify-between"
+          style={{ background: 'white', border: '1px solid #e2e8f0', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: '#f0fdf4' }}>
+              <Users size={16} style={{ color: '#059669' }} />
+            </div>
+            <div>
+              <p className="text-sm font-bold" style={{ color: '#0f172a' }}>Data Recruiter</p>
+              <p className="text-xs mt-0.5" style={{ color: '#94a3b8' }}>
+                Lihat daftar recruiter yang telah meminta CV
+              </p>
+            </div>
+          </div>
+          <Link href="/dashboard/recruiters"
+            className="flex items-center gap-2 text-xs font-semibold px-4 py-2 rounded-xl transition-all hover:opacity-90"
+            style={{ background: 'linear-gradient(135deg, #4f46e5, #7c3aed)', color: 'white', textDecoration: 'none', boxShadow: '0 4px 12px rgba(79,70,229,0.25)' }}>
+            <Users size={13} />
+            Lihat Data Recruiter
+          </Link>
+        </motion.div>
       </div>
     </main>
   );

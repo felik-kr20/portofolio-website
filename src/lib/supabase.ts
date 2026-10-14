@@ -1,9 +1,19 @@
 ﻿import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? '';
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? '';
 
-export const supabase = createClient(supabaseUrl, supabaseKey);
+if (!supabaseUrl || !supabaseKey) {
+  console.error(
+    '[Supabase] Missing environment variables: NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY. ' +
+    'Analytics will not work. Set these in Vercel Dashboard → Settings → Environment Variables.'
+  );
+}
+
+export const supabase = createClient(
+  supabaseUrl || 'https://placeholder.supabase.co',
+  supabaseKey || 'placeholder-key'
+);
 
 // Deteksi environment dari host header request
 // Tidak perlu env var — lokal = localhost, live = domain asli

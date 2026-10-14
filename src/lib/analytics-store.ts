@@ -113,3 +113,67 @@ export async function setSetting(key: string, value: string): Promise<void> {
     .upsert({ key, value, updated_at: new Date().toISOString() }, { onConflict: 'key' });
   if (error) console.warn('setSetting warning:', error.message);
 }
+
+// ── CV Requests ───────────────────────────────────────────────────────────────
+
+export interface CVRequestEntry {
+  id: number;
+  nama: string;
+  company: string;
+  email: string;
+  whatsapp: string | null;
+  env: string;
+  created_at: string;
+}
+
+export async function recordCVRequest(
+  nama: string,
+  company: string,
+  email: string,
+  whatsapp: string,
+  env: 'development' | 'production' = 'production'
+): Promise<void> {
+  const { error } = await supabase.from('cv_requests').insert({
+    nama,
+    company,
+    email,
+    whatsapp: whatsapp || null,
+    env,
+  });
+  if (error) console.warn('recordCVRequest error:', error.message);
+}
+
+export async function getCVRequests(
+  env: 'development' | 'production' = 'production',
+  filters?: { search?: string; from?: string; to?: string }
+): Promise<CVRequestEntry[]> {
+  let query = supabase
+    .from('cv_requests')
+    .select('id, nama, company, email, whatsapp, env, created_at')
+    .eq('env', env)
+    .order('created_at', { ascending: false });
+
+  if (filters?.from) query = query.gte('created_at', filters.from + 'T00:00:00.000Z');
+  if (filters?.to)   query = query.lte('created_at', filters.to   + 'T23:59:59.999Z');
+
+  const { data, error } = await query;
+  if (error) {
+    console.warn('getCVRequests error:', error.message);
+    return [];
+  }
+
+  let result = (data ?? []) as CVRequestEntry[];
+
+  // Client-side search across nama, company, email, whatsapp
+  if (filters?.search) {
+    const q = filters.search.toLowerCase();
+    result = result.filter(r =>
+      r.nama.toLowerCase().includes(q) ||
+      r.company.toLowerCase().includes(q) ||
+      r.email.toLowerCase().includes(q) ||
+      (r.whatsapp ?? '').toLowerCase().includes(q)
+    );
+  }
+
+  return result;
+}
