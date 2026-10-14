@@ -1,49 +1,4 @@
-﻿import React from 'react';
-import {
-  Document, Page, Text, View, StyleSheet, Font,
-} from '@react-pdf/renderer';
-
-// ─── Styles ───────────────────────────────────────────────────────────────────
-const S = StyleSheet.create({
-  page: {
-    fontFamily: 'Helvetica',
-    fontSize: 9,
-    color: '#111111',
-    paddingTop: 36,
-    paddingBottom: 36,
-    paddingLeft: 48,
-    paddingRight: 48,
-    lineHeight: 1.4,
-  },
-  // Header
-  headerName: { fontSize: 16, fontFamily: 'Helvetica-Bold', letterSpacing: 1, textAlign: 'center', marginBottom: 3 },
-  headerTitle: { fontSize: 10, textAlign: 'center', color: '#333', marginBottom: 4 },
-  headerContact: { fontSize: 8.5, textAlign: 'center', color: '#444', marginBottom: 10 },
-  // Section
-  sectionTitle: { fontSize: 9.5, fontFamily: 'Helvetica-Bold', letterSpacing: 0.8, color: '#111', marginBottom: 2, marginTop: 10, textTransform: 'uppercase' },
-  divider: { borderBottomWidth: 1, borderBottomColor: '#333', marginBottom: 6 },
-  // Job
-  jobRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 1 },
-  jobTitle: { fontFamily: 'Helvetica-Bold', fontSize: 9 },
-  jobCompany: { fontSize: 9, color: '#222' },
-  jobPeriod: { fontSize: 8.5, color: '#555', textAlign: 'right' },
-  bullet: { flexDirection: 'row', marginBottom: 1.5, paddingLeft: 8 },
-  bulletDot: { width: 10, fontSize: 9 },
-  bulletText: { flex: 1, fontSize: 8.5, color: '#222', lineHeight: 1.4 },
-  // Skills
-  twoCol: { flexDirection: 'row', gap: 20 },
-  colHalf: { flex: 1 },
-  skillLabel: { fontFamily: 'Helvetica-Bold', fontSize: 9.5, marginBottom: 4 },
-  skillItem: { fontSize: 8.5, color: '#333', marginBottom: 2, flexDirection: 'row' },
-  // Cert
-  certIssuer: { fontFamily: 'Helvetica-Bold', fontSize: 8.5, color: '#333', marginBottom: 1.5 },
-  certItem: { fontSize: 8.5, color: '#222', marginBottom: 1, paddingLeft: 8 },
-  certDate: { color: '#666' },
-  // Education
-  gpa: { fontSize: 8.5, color: '#444', paddingLeft: 0, marginTop: -1, marginBottom: 3 },
-  // Summary
-  summaryText: { fontSize: 8.5, color: '#222', lineHeight: 1.6 },
-});
+﻿import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 const softSkills = [
@@ -76,14 +31,14 @@ const hardSkills = [
 
 const certifications = [
   {
-    issuer: 'Balai Pelatihan dan Pengembangan Teknologi dan Komunikasi',
+    issuer: 'Balai Pelatihan dan Pengembangan Teknologi Informasi dan Komunikasi',
     items: [{ name: 'Skema Teknisi Utama Jaringan Komputer', date: '2-4 Mei 2018' }],
   },
   {
     issuer: 'Cisco Networking Academy',
     items: [
-      { name: 'CCNA Routing and Switching Introduction to Network', date: '3 Agustus 2018' },
-      { name: 'CCNA Routing and Switching Essentials', date: '6 Februari 2019' },
+      { name: 'CCNA: Introduction to Network', date: '3 Agustus 2018' },
+      { name: 'CCNA: Routing and Switching Essentials', date: '6 Februari 2019' },
       { name: 'CCNA Security', date: '18 Agustus 2020' },
     ],
   },
@@ -95,18 +50,18 @@ const experiences = [
     company: 'PT Sentra Inovasi Solusindo',
     period: 'Oktober 2023 - April 2027',
     items: [
-      'Memberikan dukungan teknis (service) untuk perangkat PC, laptop, dan printer',
-      'Menyiapkan dan melakukan konfigurasi perangkat pendukung operasional kerja',
-      'Melakukan testing dan quality assurance aplikasi Kasir, HRMS, TMS, dan aplikasi Sales',
-      'Melakukan setup serta menjadi PIC aplikasi HRMS untuk PT Thai Makmur dan PT Tri Boga Abadi',
-      'Melakukan setup aplikasi kasir (Vireo POS) untuk customer UMKM dan memberikan training kepada customer/client',
-      'Menjadi PIC Project aplikasi TMS (Tracking Management System) di PT Dino Logistics Perkasa',
-      'Menjadi PIC Project aplikasi Petty Cash System di PT Dino Logistics Perkasa',
-      'Menjadi PIC Project Website System di PT Dino Logistics Perkasa',
-      'Melakukan testing dan implementasi proyek aplikasi Visualization Sequence Stacking for Big Part untuk PT Toyota',
-      'Menjadi PIC Project aplikasi platform Messaging Channel',
-      'Menjadi PIC Project aplikasi platform Bonusmu.id untuk PT Bintang Mahameru Utama',
-      'Melakukan standby sebagai Call Center dan Host to Host untuk monitoring dan support sistem',
+      'Memberikan dukungan teknis untuk perangkat PC, laptop, dan printer',
+      'Menyiapkan dan konfigurasi perangkat pendukung operasional kerja',
+      'Testing dan QA aplikasi Kasir, HRMS, TMS, dan aplikasi Sales',
+      'Setup & PIC aplikasi HRMS untuk PT Thai Makmur dan PT Tri Boga Abadi',
+      'Setup aplikasi kasir (Vireo POS) dan training kepada customer/client',
+      'PIC Project TMS (Tracking Management System) di PT Dino Logistics Perkasa',
+      'PIC Project Petty Cash System di PT Dino Logistics Perkasa',
+      'PIC Project Website System di PT Dino Logistics Perkasa',
+      'Testing aplikasi Visualization Sequence Stacking for Big Part (PT Toyota)',
+      'PIC Project platform Messaging Channel',
+      'PIC Project platform Bonusmu.id untuk PT Bintang Mahameru Utama',
+      'Standby Call Center dan Host to Host monitoring dan support sistem',
     ],
   },
   {
@@ -114,10 +69,10 @@ const experiences = [
     company: 'PT Leader IT Service Solutions',
     period: 'Januari 2023 - Juli 2023',
     items: [
-      'Bertugas di area pertambangan batu bara milik KPC Kalimantan Timur',
+      'Bertugas di area pertambangan batu bara KPC Kalimantan Timur',
       'Melakukan instalasi UMPC pada unit kendaraan berat',
-      'Melakukan pengecekan perangkat secara berkala',
-      'Melakukan troubleshooting jika terjadi kendala pada perangkat',
+      'Pengecekan perangkat secara berkala',
+      'Troubleshooting kendala pada perangkat',
     ],
   },
   {
@@ -125,8 +80,8 @@ const experiences = [
     company: 'PT Lintas Teknologi Indonesia',
     period: 'Juni 2021 - Oktober 2021',
     items: [
-      'Bertugas sebagai IT Support di PT Lintas Teknologi Indonesia',
-      'Melakukan implementasi security software Carbon Black EDR (APP/CTR) pada perangkat PT Telkomsel',
+      'IT Support di PT Lintas Teknologi Indonesia',
+      'Implementasi security software Carbon Black EDR pada perangkat PT Telkomsel',
       'Membuat laporan pekerjaan harian tim IT',
     ],
   },
@@ -135,120 +90,177 @@ const experiences = [
     company: 'Kementerian Perindustrian',
     period: 'Agustus 2019 - September 2019',
     items: [
-      'Memberikan dukungan administratif dan operasional kantor',
-      'Melakukan pengecekan serta input data ke dalam database',
+      'Dukungan administratif dan operasional kantor',
+      'Pengecekan serta input data ke dalam database',
     ],
   },
 ];
 
-// ─── Component ────────────────────────────────────────────────────────────────
-export function CVDocument() {
-  return (
-    <Document title="CV Felik Kriswanto" author="Felik Kriswanto">
-      <Page size="A4" style={S.page}>
+// ─── Helper: draw text with word-wrap returning new Y ─────────────────────────
+function drawWrapped(
+  page: ReturnType<PDFDocument['addPage']>,
+  text: string,
+  x: number, y: number,
+  maxWidth: number, fontSize: number,
+  font: Awaited<ReturnType<PDFDocument['embedFont']>>,
+  color = rgb(0.13, 0.13, 0.13),
+  lineHeight = 1.45,
+): number {
+  const words = text.split(' ');
+  let line = '';
+  let curY = y;
+  const lh = fontSize * lineHeight;
+  for (const word of words) {
+    const test = line ? `${line} ${word}` : word;
+    const w = font.widthOfTextAtSize(test, fontSize);
+    if (w > maxWidth && line) {
+      page.drawText(line, { x, y: curY, size: fontSize, font, color });
+      curY -= lh;
+      line = word;
+    } else {
+      line = test;
+    }
+  }
+  if (line) {
+    page.drawText(line, { x, y: curY, size: fontSize, font, color });
+    curY -= lh;
+  }
+  return curY;
+}
 
-        {/* Header */}
-        <Text style={S.headerName}>FELIK KRISWANTO</Text>
-        <Text style={S.headerTitle}>IT Support &amp; Technical Support Specialist</Text>
-        <Text style={S.headerContact}>
-          Felik103@gmail.com  |  +62 899-7671-236  |  Bekasi, Jawa Barat, Indonesia
-        </Text>
+// ─── Main generator ───────────────────────────────────────────────────────────
+export async function generateCVPdf(): Promise<Uint8Array> {
+  const doc   = await PDFDocument.create();
+  const bold  = await doc.embedFont(StandardFonts.HelveticaBold);
+  const reg   = await doc.embedFont(StandardFonts.Helvetica);
 
-        {/* Ringkasan Profil */}
-        <Text style={S.sectionTitle}>RINGKASAN PROFIL</Text>
-        <View style={S.divider} />
-        <Text style={S.summaryText}>
-          Profesional IT Support dengan pengalaman lebih dari 4 tahun di bidang IT sebagai IT Service Staff dan IT Support,
-          dengan keahlian dalam technical support, implementasi sistem, testing aplikasi, serta penanganan project aplikasi
-          seperti HRMS, POS/Kasir, TMS, dan Website System. Berpengalaman sebagai PIC project dan aplikasi, melakukan
-          troubleshooting perangkat dan sistem, serta memberikan training kepada user dan client. Lulusan S1 Teknik Informatika
-          konsentrasi Networking dari STMIK Nusa Mandiri Jakarta dengan IPK 3,61. Pribadi yang jujur, teliti, bertanggung jawab,
-          komunikatif, dan adaptif terhadap teknologi baru.
-        </Text>
+  const W = 595.28; // A4 width pt
+  const H = 841.89; // A4 height pt
+  const ML = 48, MR = 48, MT = 40, MB = 40;
+  const TW = W - ML - MR; // text width
 
-        {/* Pengalaman Kerja */}
-        <Text style={S.sectionTitle}>PENGALAMAN KERJA</Text>
-        <View style={S.divider} />
-        {experiences.map((exp, i) => (
-          <View key={i} style={{ marginBottom: 8 }}>
-            <View style={S.jobRow}>
-              <View style={{ flex: 1 }}>
-                <Text>
-                  <Text style={S.jobTitle}>{exp.title}, </Text>
-                  <Text style={S.jobCompany}>{exp.company}</Text>
-                </Text>
-              </View>
-              <Text style={S.jobPeriod}>{exp.period}</Text>
-            </View>
-            {exp.items.map((item, j) => (
-              <View key={j} style={S.bullet}>
-                <Text style={S.bulletDot}>•</Text>
-                <Text style={S.bulletText}>{item}</Text>
-              </View>
-            ))}
-          </View>
-        ))}
+  let page = doc.addPage([W, H]);
+  let y = H - MT;
 
-        {/* Pendidikan */}
-        <Text style={S.sectionTitle}>PENDIDIKAN</Text>
-        <View style={S.divider} />
-        {[
-          { title: 'S1 Teknik Informatika (Networking)', company: 'STMIK Nusa Mandiri Jakarta', period: '2016-2020', gpa: 'IPK: 3,61' },
-          { title: 'SMK Teknik Komputer dan Jaringan', company: 'SMK Tinta Emas Indonesia', period: '2013-2016' },
-          { title: 'SMP Negeri 10 Kota Bekasi', company: 'Kota Bekasi, Jawa Barat', period: '2010-2013' },
-          { title: 'SD Negeri Padurenan 1', company: 'Bekasi, Jawa Barat', period: '2004-2010' },
-        ].map((edu, i) => (
-          <View key={i} style={{ marginBottom: 4 }}>
-            <View style={S.jobRow}>
-              <Text>
-                <Text style={S.jobTitle}>{edu.title}, </Text>
-                <Text style={S.jobCompany}>{edu.company}</Text>
-              </Text>
-              <Text style={S.jobPeriod}>{edu.period}</Text>
-            </View>
-            {edu.gpa && <Text style={S.gpa}>  {edu.gpa}</Text>}
-          </View>
-        ))}
+  const black  = rgb(0.07, 0.07, 0.07);
+  const gray   = rgb(0.4, 0.4, 0.4);
+  const lgray  = rgb(0.6, 0.6, 0.6);
+  const indigo = rgb(0.31, 0.27, 0.9);
 
-        {/* Sertifikasi */}
-        <Text style={S.sectionTitle}>SERTIFIKASI</Text>
-        <View style={S.divider} />
-        {certifications.map((group, i) => (
-          <View key={i} style={{ marginBottom: 6 }}>
-            <Text style={S.certIssuer}>{group.issuer}</Text>
-            {group.items.map((item, j) => (
-              <Text key={j} style={S.certItem}>
-                {item.name} <Text style={S.certDate}>— {item.date}</Text>
-              </Text>
-            ))}
-          </View>
-        ))}
+  // ensure new page when needed
+  const ensurePage = (needed: number) => {
+    if (y - needed < MB) {
+      page = doc.addPage([W, H]);
+      y = H - MT;
+    }
+  };
 
-        {/* Keterampilan */}
-        <Text style={S.sectionTitle}>KETERAMPILAN</Text>
-        <View style={S.divider} />
-        <View style={S.twoCol}>
-          <View style={S.colHalf}>
-            <Text style={S.skillLabel}>Soft Skill</Text>
-            {softSkills.map((s, i) => (
-              <View key={i} style={S.bullet}>
-                <Text style={S.bulletDot}>•</Text>
-                <Text style={S.bulletText}>{s}</Text>
-              </View>
-            ))}
-          </View>
-          <View style={S.colHalf}>
-            <Text style={S.skillLabel}>Hard Skill</Text>
-            {hardSkills.map((s, i) => (
-              <View key={i} style={S.bullet}>
-                <Text style={S.bulletDot}>•</Text>
-                <Text style={S.bulletText}>{s}</Text>
-              </View>
-            ))}
-          </View>
-        </View>
+  // section title helper
+  const drawSection = (title: string) => {
+    ensurePage(24);
+    y -= 8;
+    page.drawText(title, { x: ML, y, size: 9, font: bold, color: black });
+    y -= 4;
+    page.drawLine({ start: { x: ML, y }, end: { x: W - MR, y }, thickness: 0.8, color: rgb(0.2,0.2,0.2) });
+    y -= 7;
+  };
 
-      </Page>
-    </Document>
-  );
+  // ── HEADER ──
+  const nameW = bold.widthOfTextAtSize('FELIK KRISWANTO', 16);
+  page.drawText('FELIK KRISWANTO', { x: (W - nameW) / 2, y, size: 16, font: bold, color: black });
+  y -= 18;
+  const titleStr = 'IT Support & Technical Support Specialist';
+  const titleW = reg.widthOfTextAtSize(titleStr, 10);
+  page.drawText(titleStr, { x: (W - titleW) / 2, y, size: 10, font: reg, color: gray });
+  y -= 14;
+  const contact = 'Felik103@gmail.com  |  +62 899-7671-236  |  Bekasi, Jawa Barat, Indonesia';
+  const contactW = reg.widthOfTextAtSize(contact, 8.5);
+  page.drawText(contact, { x: (W - contactW) / 2, y, size: 8.5, font: reg, color: lgray });
+  y -= 14;
+
+  // ── RINGKASAN PROFIL ──
+  drawSection('RINGKASAN PROFIL');
+  const summary = 'Profesional IT Support dengan pengalaman lebih dari 4 tahun sebagai IT Service Staff dan IT Support, dengan keahlian dalam technical support, implementasi sistem, testing aplikasi, serta penanganan project seperti HRMS, POS/Kasir, TMS, dan Website System. Lulusan S1 Teknik Informatika (Networking) STMIK Nusa Mandiri Jakarta IPK 3,61. Pribadi yang jujur, teliti, bertanggung jawab, komunikatif, dan adaptif.';
+  y = drawWrapped(page, summary, ML, y, TW, 8.5, reg, black);
+  y -= 2;
+
+  // ── PENGALAMAN KERJA ──
+  drawSection('PENGALAMAN KERJA');
+  for (const exp of experiences) {
+    ensurePage(30);
+    const jobLine = `${exp.title},  ${exp.company}`;
+    const periodW = reg.widthOfTextAtSize(exp.period, 8);
+    page.drawText(jobLine, { x: ML, y, size: 8.5, font: bold, color: black });
+    page.drawText(exp.period, { x: W - MR - periodW, y, size: 8, font: reg, color: lgray });
+    y -= 11;
+    for (const item of exp.items) {
+      ensurePage(12);
+      page.drawText('•', { x: ML + 4, y, size: 8.5, font: reg, color: black });
+      y = drawWrapped(page, item, ML + 14, y, TW - 14, 8.5, reg, black);
+    }
+    y -= 3;
+  }
+
+  // ── PENDIDIKAN ──
+  drawSection('PENDIDIKAN');
+  const edu = [
+    { title: 'S1 Teknik Informatika (Networking),  STMIK Nusa Mandiri Jakarta', period: '2016-2020', note: 'IPK: 3,61' },
+    { title: 'SMK Teknik Komputer dan Jaringan,  SMK Tinta Emas Indonesia', period: '2013-2016' },
+    { title: 'SMP Negeri 10 Kota Bekasi', period: '2010-2013' },
+    { title: 'SD Negeri Padurenan 1, Bekasi', period: '2004-2010' },
+  ];
+  for (const e of edu) {
+    ensurePage(20);
+    const pw = reg.widthOfTextAtSize(e.period, 8);
+    page.drawText(e.title, { x: ML, y, size: 8.5, font: bold, color: black });
+    page.drawText(e.period, { x: W - MR - pw, y, size: 8, font: reg, color: lgray });
+    y -= 11;
+    if (e.note) {
+      page.drawText(e.note, { x: ML + 8, y, size: 8, font: reg, color: gray });
+      y -= 11;
+    }
+  }
+  y -= 2;
+
+  // ── SERTIFIKASI ──
+  drawSection('SERTIFIKASI');
+  for (const group of certifications) {
+    ensurePage(20);
+    page.drawText(group.issuer, { x: ML, y, size: 8.5, font: bold, color: black });
+    y -= 11;
+    for (const item of group.items) {
+      ensurePage(12);
+      page.drawText('•', { x: ML + 4, y, size: 8.5, font: reg, color: black });
+      page.drawText(`${item.name} — ${item.date}`, { x: ML + 14, y, size: 8.5, font: reg, color: black });
+      y -= 11;
+    }
+    y -= 3;
+  }
+
+  // ── KETERAMPILAN ──
+  drawSection('KETERAMPILAN');
+  ensurePage(20);
+  const colW = (TW - 20) / 2;
+  page.drawText('Soft Skill', { x: ML, y, size: 9, font: bold, color: black });
+  page.drawText('Hard Skill', { x: ML + colW + 20, y, size: 9, font: bold, color: black });
+  y -= 12;
+
+  const maxRows = Math.max(softSkills.length, hardSkills.length);
+  for (let i = 0; i < maxRows; i++) {
+    ensurePage(12);
+    if (softSkills[i]) {
+      page.drawText('•', { x: ML + 4, y, size: 8.5, font: reg, color: black });
+      page.drawText(softSkills[i], { x: ML + 12, y, size: 8.5, font: reg, color: black });
+    }
+    if (hardSkills[i]) {
+      page.drawText('•', { x: ML + colW + 24, y, size: 8.5, font: reg, color: black });
+      const hw = hardSkills[i];
+      page.drawText(hw.length > 38 ? hw.slice(0, 36) + '...' : hw, { x: ML + colW + 32, y, size: 8.5, font: reg, color: black });
+    }
+    y -= 12;
+  }
+
+  void indigo; // suppress unused warning
+  const bytes = await doc.save();
+  return bytes;
 }
